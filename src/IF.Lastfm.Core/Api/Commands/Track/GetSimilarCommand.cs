@@ -20,6 +20,8 @@ namespace IF.Lastfm.Core.Api.Commands.Track
 
         public string TrackName { get; set; }
 
+        public string TrackMbid { get; set; }
+
         public GetSimilarCommand(ILastAuth auth, string trackName, string artistName)
             : base(auth)
         {
@@ -27,17 +29,30 @@ namespace IF.Lastfm.Core.Api.Commands.Track
             TrackName = trackName;
         }
 
+        public GetSimilarCommand(ILastAuth auth, string trackMbid)
+            : base(auth)
+        {
+            TrackMbid = trackMbid;
+        }
+
         public override void SetParameters()
         {
-            Parameters.Add("track", TrackName);
-            Parameters.Add("artist", ArtistName);
+            if (TrackMbid != null)
+            {
+                Parameters.Add("mbid", TrackMbid);
+            }
+            else
+            {
+                Parameters.Add("track", TrackName);
+                Parameters.Add("artist", ArtistName);
+
+                Parameters.Add("autocorrect", Convert.ToInt32(Autocorrect).ToString());
+            }
 
             if (Limit != null)
             {
                 Parameters.Add("limit", Limit.ToString());
             }
-
-            Parameters.Add("autocorrect", Convert.ToInt32(Autocorrect).ToString());
             
             DisableCaching();
         }

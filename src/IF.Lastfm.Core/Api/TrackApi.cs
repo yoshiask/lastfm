@@ -85,6 +85,17 @@ namespace IF.Lastfm.Core.Api
             return await command.ExecuteAsync();
         }
 
+        public async Task<PageResponse<LastTrack>> GetSimilarByMbidAsync(string trackMbid, int limit = 100)
+        {
+            var command = new GetSimilarCommand(Auth, trackMbid)
+            {
+                Limit = limit,
+                HttpClient = HttpClient
+            };
+
+            return await command.ExecuteAsync();
+        }
+
         public async Task<LastResponse> LoveAsync(string trackname, string artistname)
         {
             var command = new LoveCommand(Auth, trackname, artistname)
